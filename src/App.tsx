@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider } from './context/ThemeContext';
+import { ThemeProvider } from './lib/ThemeContext';
 import DrawingCanvas from './components/DrawingCanvas';
 
 function App() {

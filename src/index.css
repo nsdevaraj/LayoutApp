@@ -2,15 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  cursor: url('/cursor.svg'), auto;
+}
+
+button,label {
+  cursor: unset;
+}
+
 .react-resizable {
   position: relative;
 }
 
 .react-resizable-handle {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  bottom: 0;
+  height: 4%;
+  width: 4%;
+  z-index: 1;
+  background-color: transparent;
+  cursor: se-resize;
+}
+
+.react-resizable-handle-w,
+.react-resizable-handle-e {
+  top: 4%;
+  cursor: ew-resize;
+  height: 96%;
+  transform: rotate(0deg);
+  width: 4%;
+}
+
+.react-resizable-handle-n,
+.react-resizable-handle-s {
+  cursor: ns-resize;
+  width: 96%;
+  transform: rotate(0deg);
+  height: 4%;
+}
+
+.react-resizable-handle-w {
+  left: 0;
+}
+
+.react-resizable-handle-e {
+  right: 0;
+}
+
+.react-resizable-handle-n {
+  top: 0;
+  left: 4%;
+}
+
+.react-resizable-handle-s {
+  bottom: 0;
+  right: 4%;
+}
+
+.react-resizable-handle-se {
   bottom: 0;
   right: 0;
   cursor: se-resize;
+}
+
+.react-resizable-handle-ne {
+  top: 0;
+  right: 0;
+  cursor: ne-resize;
+}
+
+.react-resizable-handle-nw {
+  top: 0;
+  left: 0;
+  cursor: nw-resize;
+}
+
+.react-resizable-handle-sw {
+  bottom: 0;
+  left: 0;
+  cursor: sw-resize;
 }
