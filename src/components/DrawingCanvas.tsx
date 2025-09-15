@@ -21,6 +21,7 @@ export default function DrawingCanvas() {
     canvasWidth,
     canvasHeight,
     canvasBgColor,
+    canvasBgImage,
     canvasFgColor,
     roundedCorners,
     showGrid,
@@ -65,9 +66,11 @@ export default function DrawingCanvas() {
 
   const getBackgroundStyle = () => {
     if (useGradient) {
-      return gradientType === "custom"
-        ? `linear-gradient(${angle}deg,  ${customGradientColors.join(", ")})`
-        : gradientType;
+      return canvasBgImage !== null 
+        ? `url(${canvasBgImage})` : 
+        gradientType === "custom" 
+          ? `linear-gradient(${angle}deg,  ${customGradientColors.join(", ")})`
+          : gradientType;
     }
     return `linear-gradient(${canvasBgColor}, ${canvasBgColor})`;
   };
@@ -116,6 +119,7 @@ export default function DrawingCanvas() {
         backgroundColor: canvasBgColor,
         scale: 2,
         logging: false,
+        useCORS:true
       }).then((canvas: HTMLCanvasElement) => {
         // Restore hidden elements
         hiddenElements.forEach(({ element, originalDisplay }) => {
@@ -129,6 +133,13 @@ export default function DrawingCanvas() {
           .replace(/:/g, "-")}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
+      }).catch((err) => {
+        console.error("html2canvas Error : "+err);
+        
+        hiddenElements.forEach(({ element, originalDisplay }) => {
+          element.style.display = originalDisplay;
+        });
+        
       });
     }
   };
@@ -140,6 +151,7 @@ export default function DrawingCanvas() {
       canvasHeight,
       canvasBgColor,
       canvasFgColor,
+      canvasBgImage,
       roundedCorners,
       showGrid,
       useGradient,
@@ -189,6 +201,10 @@ export default function DrawingCanvas() {
     actions.setCanvasColors(color);
   };
 
+  const handleBgImageChange = (bgImage: string|null) => {
+    actions.setCanvasImage(bgImage);
+  }
+
   const handleFgColorChange = (color: string) => {
     actions.setCanvasColors(undefined, color);
   };
@@ -233,11 +249,13 @@ export default function DrawingCanvas() {
           canvasWidth={canvasWidth}
           canvasHeight={canvasHeight}
           canvasBgColor={canvasBgColor}
+          canvasBgImage={canvasBgImage}
           canvasFgColor={canvasFgColor}
           roundedCorners={roundedCorners}
           showGrid={showGrid}
           onCanvasDimensionSubmit={handleCanvasDimensionSubmit}
           onBgColorChange={handleBgColorChange}
+          onBgImageChange={handleBgImageChange}
           onFgColorChange={handleFgColorChange}
           onRoundedCornersToggle={handleRoundedCornersToggle}
           onShowGridToggle={handleShowGridToggle}
@@ -283,7 +301,9 @@ export default function DrawingCanvas() {
                     ${getBackgroundStyle()}
                   `
                 : getBackgroundStyle(),
-              backgroundSize: showGrid ? "20px 20px" : "auto",
+              backgroundSize: showGrid ? "20px 20px" : getBackgroundStyle().startsWith("url") ? "cover" :"auto",
+              backgroundRepeat: showGrid ? "repeat":"no-repeat",
+              backgroundPosition:"center"
             }}
           >
             {/* Render guidelines using the separate component */}
