@@ -5,7 +5,7 @@ import {
 import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import ColorPicker from "./ColorPicker";
-import BackgroundPopover from "./BackgroundPopOver";
+import BackgroundPopover from "./BackgroundImageSelector";
 
 type PanelShape =
   | "square"
